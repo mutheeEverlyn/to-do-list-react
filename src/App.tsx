@@ -9,8 +9,8 @@ const Todos: TodoListApp[] = [
   { id: "2", todo: "jog around the park 3x", completed: false },
   { id: "3", todo: "10 minutes meditation", completed: false },
   { id: "4", todo: "Read for 1 hour", completed: false },
-  { id: "4", todo: "pick up groceries", completed: false },
-  { id: "4", todo: "complete toDo app for frontend mentors", completed: false },
+  { id: "5", todo: "pick up groceries", completed: false },
+  { id: "6", todo: "complete toDo app for frontend mentors", completed: false },
 ];
 
 export default function TodoApp() {
@@ -23,7 +23,7 @@ export default function TodoApp() {
   return (
     <div className={`${backgroundTheme ? "dark" : "light"} container`}>
       <div className="backgroundImage"></div>
-      <TodoList todos={Todos} onToggle={toggleHandler} />
+      <TodoList todos={Todos} changeBackground={toggleHandler} />
     </div>
   );
 }

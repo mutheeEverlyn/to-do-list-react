@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react";
-
+import './reactToDoList.scss';
 export interface TodoListApp {
 todo: string;
  completed: boolean;
@@ -63,10 +63,10 @@ function todoReducer(state: State, action: Action): State {
 
 interface TodoListProps {
   todos: TodoListApp[];
-  onToggle: () => void;
+  changeBackground: () => void;
 }
 
-export default function TodoList({ todos, onToggle }: TodoListProps) {
+export default function TodoList({ todos, changeBackground }: TodoListProps) {
   const [state, dispatch] = useReducer(todoReducer, { ...initialState, todos });
   const [todoDescription, setTodoDescription] = useState("");
 
@@ -112,12 +112,12 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
   }
 
   return (
-    <div className="todo-list container">
-      <div className="row space-between mb-50">
-        <h1>Todo</h1>
-        <button className="toggle" onClick={onToggle}>
-          <img className="sunIcon" src='../assets/icon-sun.svg' alt="sun-icon" />
-          <img className="moonIcon" src="../assets/icon-moon.svg" alt="moon-icon" />
+    <div className="container">
+      <div className="header">
+        <h1>TODO</h1>
+        <button className="changeBackground" onClick={changeBackground}>
+          <img src='./src/assets/icon-sun.svg' className="sunIcon" alt="sun-icon" />
+          <img className="moonIcon" src="./src/assets/icon-moon.svg" alt="moon-icon" />
         </button>
       </div>
       <form
@@ -165,7 +165,7 @@ function Todo({ todo, tick, cancel }: TodoProps) {
         <p className="title">{todo.todo}</p>
       </div>
       <button className="cancel" onClick={() => cancel(todo.id)}>
-        <img src='../' alt="Delete" />
+        <img src='./src/assets/icon-cross.svg' alt="Delete" />
       </button>
     </div>
   );

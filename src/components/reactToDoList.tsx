@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react";
-import './reactToDoList.scss';
+import './reactToDoList.css';
 export interface TodoListApp {
 todo: string;
  completed: boolean;
@@ -124,7 +124,7 @@ export default function TodoList({ todos, changeBackground }: TodoListProps) {
         className="row todo-container input-container mb-30"
         onSubmit={handleSubmit}
       >
-        <button className="check"></button>
+        <button className="circle"></button>
         <input
           type="text"
           placeholder="Create A New Todo..."
@@ -161,7 +161,7 @@ function Todo({ todo, tick, cancel }: TodoProps) {
   return (
     <div className={`${todo.completed ? "completed" : ""} todo todo-container`}>
       <div className="row">
-        <button className="check" onClick={() => tick(todo)}></button>
+        <button className="circle" onClick={() => tick(todo)}></button>
         <p className="title">{todo.todo}</p>
       </div>
       <button className="cancel" onClick={() => cancel(todo.id)}>

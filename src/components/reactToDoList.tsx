@@ -14,8 +14,8 @@ interface State {
 type Action =
   | { type: "AddTodoList"; payload: TodoListApp }
   | { type: "ToggleTodoList"; payload: TodoListApp }
-  | { type: "DELETE_TODO"; payload: { id: string } }
-  | { type: "CLEAR_COMPLETED" }
+  | { type: "DeleteTodo"; payload: { id: string } }
+  | { type: "ClearCompletedTodo" }
   | { type: "SET_FILTER"; payload: "All" | "Completed" | "Active" };
 
 
@@ -24,7 +24,7 @@ const initialState: State = {
   filter: "All",
 };
 
-// Define the reducer function
+
 function todoReducer(state: State, action: Action): State {
   switch (action.type) {
     case "AddTodoList":
@@ -41,12 +41,12 @@ function todoReducer(state: State, action: Action): State {
             : todo
         ),
       };
-    case "DELETE_TODO":
+    case "DeleteTodo":
       return {
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload.id),
       };
-    case "CLEAR_COMPLETED":
+    case "ClearCompletedTodo":
       return {
         ...state,
         todos: state.todos.filter((todo) => !todo.completed),
@@ -100,11 +100,11 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
   }
 
   function handleDelete(id: string) {
-    dispatch({ type: "DELETE_TODO", payload: { id } });
+    dispatch({ type: "DeleteTodo", payload: { id } });
   }
 
   function clearHandle() {
-    dispatch({ type: "CLEAR_COMPLETED" });
+    dispatch({ type: "ClearCompletedTodo" });
   }
 
   function filterHandle(filter: "All" | "Completed" | "Active") {
@@ -116,8 +116,8 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
       <div className="row space-between mb-50">
         <h1>Todo</h1>
         <button className="toggle" onClick={onToggle}>
-          <img className="sun" src="images/icon-sun.svg" alt="" />
-          <img className="moon" src="images/icon-moon.svg" alt="" />
+          <img className="sunIcon" src='./assets/icon-sun.svg' alt="sun-icon" />
+          <img className="moonIcon" src="./assets/icon-moon.svg" alt="moon-icon" />
         </button>
       </div>
       <form
@@ -137,14 +137,14 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
           <Todo
             key={todo.id}
             todo={todo}
-            onCheck={handleCheck}
-            onDelete={handleDelete}
+            tick={handleCheck}
+            cancel={handleDelete}
           />
         ))}
       </div>
       <TodoStats
         todos={shownList}
-        onClear={clearHandle}
+        cancel={clearHandle}
         onFilter={filterHandle}
       />
     </div>
@@ -153,19 +153,19 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
 
 interface TodoProps {
   todo: TodoListApp;
-  onCheck: (todo: TodoListApp) => void;
-  onDelete: (id: string) => void;
+  tick: (todo: TodoListApp) => void;
+  cancel: (id: string) => void;
 }
 
-function Todo({ todo, onCheck, onDelete }: TodoProps) {
+function Todo({ todo, tick, cancel }: TodoProps) {
   return (
     <div className={`${todo.completed ? "completed" : ""} todo todo-container`}>
       <div className="row">
-        <button className="check" onClick={() => onCheck(todo)}></button>
+        <button className="check" onClick={() => tick(todo)}></button>
         <p className="title">{todo.todo}</p>
       </div>
-      <button className="cancel" onClick={() => onDelete(todo.id)}>
-        <img src="images/icon-cross.svg" alt="Delete" />
+      <button className="cancel" onClick={() => cancel(todo.id)}>
+        <img src='../' alt="Delete" />
       </button>
     </div>
   );
@@ -173,11 +173,11 @@ function Todo({ todo, onCheck, onDelete }: TodoProps) {
 
 interface TodoStatsProps {
   todos: TodoListApp[];
-  onClear: () => void;
+  cancel: () => void;
   onFilter: (filter: "All" | "Completed" | "Active") => void;
 }
 
-function TodoStats({ todos, onClear, onFilter }: TodoStatsProps) {
+function TodoStats({ todos, cancel, onFilter }: TodoStatsProps) {
   const [activeFilter, setActiveFilter] = useState<"All" | "Completed" | "Active">("All");
 
   function filterHandle(filter: "All" | "Completed" | "Active") {
@@ -211,7 +211,7 @@ function TodoStats({ todos, onClear, onFilter }: TodoStatsProps) {
             Completed
           </button>
         </div>
-        <button className="clear" onClick={onClear}>
+        <button className="clear" onClick={cancel}>
           Clear Completed
         </button>
       </div>
@@ -220,7 +220,7 @@ function TodoStats({ todos, onClear, onFilter }: TodoStatsProps) {
           <div className="count">
             {todos.filter((todo) => !todo.completed).length} Items Left
           </div>
-          <button className="clear" onClick={onClear}>
+          <button className="clear" onClick={cancel}>
             Clear Completed
           </button>
         </div>

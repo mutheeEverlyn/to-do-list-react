@@ -1,26 +1,29 @@
 import "./App.scss";
+import { TodoListApp} from "./components/reactToDoList";
 import { useState } from "react";
 import TodoList from "./components/reactToDoList";
-import { TodoListApp} from "./components/reactToDoList";
 
-let initialTodos: TodoListApp[] = [
-  { id: "1", todo: "Buy groceries", completed: false },
-  { id: "2", todo: "Clean the house", completed: false },
-  { id: "3", todo: "Prepare dinner", completed: false },
-  { id: "4", todo: "Read a book", completed: false },
+
+const Todos: TodoListApp[] = [
+  { id: "1", todo: "complete online JavaScript course", completed: false },
+  { id: "2", todo: "jog around the park 3x", completed: false },
+  { id: "3", todo: "10 minutes meditation", completed: false },
+  { id: "4", todo: "Read for 1 hour", completed: false },
+  { id: "4", todo: "pick up groceries", completed: false },
+  { id: "4", todo: "complete toDo app for frontend mentors", completed: false },
 ];
 
-export default function App() {
-  const [theme, setTheme] = useState(true); // true for dark theme false for light theme
+export default function TodoApp() {
+  const [backgroundTheme, setBackgroundTheme] = useState(true); 
 
   function toggleHandler() {
-    setTheme(!theme);
+    setBackgroundTheme(!backgroundTheme);
   }
 
   return (
-    <div className={`${theme ? "dark" : "light"} app`}>
-      <div className="background-image"></div>
-      <TodoList todos={initialTodos} onToggle={toggleHandler} />
+    <div className={`${backgroundTheme ? "dark" : "light"} container`}>
+      <div className="backgroundImage"></div>
+      <TodoList todos={Todos} onToggle={toggleHandler} />
     </div>
   );
 }

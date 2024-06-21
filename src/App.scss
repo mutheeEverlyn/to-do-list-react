@@ -7,7 +7,7 @@
 .container {
   position: relative;
   min-height: 100vh;
-  font-family: "Josefin Sans", sans-serif;
+  font-family:  sans-serif;
   
 .dark {
   background-color: hsl(235, 21%, 11%);
@@ -131,17 +131,12 @@ h1 {
 @media (max-width: 760px) {
   .todos-stats.desktop {
     display: none;
-  }
-
-  .todos-stats.mobile {
-    display: block;
+    .mobile {
+      display: block;
+    }
   }
 }
 
-.todos-stats,
-.todos-stats button {
-  font-size: 16px;
-}
 
 .app.dark .todos-stats,
 .app.dark .todos-stats button {

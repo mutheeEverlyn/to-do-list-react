@@ -116,8 +116,8 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
       <div className="row space-between mb-50">
         <h1>Todo</h1>
         <button className="toggle" onClick={onToggle}>
-          <img className="sunIcon" src='./assets/icon-sun.svg' alt="sun-icon" />
-          <img className="moonIcon" src="./assets/icon-moon.svg" alt="moon-icon" />
+          <img className="sunIcon" src='../assets/icon-sun.svg' alt="sun-icon" />
+          <img className="moonIcon" src="../assets/icon-moon.svg" alt="moon-icon" />
         </button>
       </div>
       <form

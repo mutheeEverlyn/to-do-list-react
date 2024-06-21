@@ -1,5 +1,8 @@
 import { useReducer, useState } from "react";
 import './reactToDoList.css';
+import iconSun from '../assets/icon-sun.svg' ;
+import iconMoon from '../assets/icon-moon.svg' ;
+import iconCross from '../assets/icon-cross.svg' ;
 export interface TodoListApp {
 todo: string;
  completed: boolean;
@@ -116,8 +119,8 @@ export default function TodoList({ todos, changeBackground }: TodoListProps) {
       <div className="header">
         <h1>TODO</h1>
         <button className="changeBackground" onClick={changeBackground}>
-          <img src='./src/assets/icon-sun.svg' className="sunIcon" alt="sun-icon" />
-          <img className="moonIcon" src="./src/assets/icon-moon.svg" alt="moon-icon" />
+          <img src={iconSun} className="sunIcon" alt="sun-icon" />
+          <img className="moonIcon" src={iconMoon} alt="moon-icon" />
         </button>
       </div>
       <form
@@ -165,7 +168,7 @@ function Todo({ todo, tick, cancel }: TodoProps) {
         <p className="title">{todo.todo}</p>
       </div>
       <button className="cancel" onClick={() => cancel(todo.id)}>
-        <img src='./src/assets/icon-cross.svg' alt="Delete" />
+        <img src={iconCross} alt="Delete" />
       </button>
     </div>
   );

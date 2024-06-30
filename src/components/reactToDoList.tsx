@@ -1,12 +1,13 @@
 import { useReducer, useState } from "react";
 import './reactToDoList.css';
-import iconSun from '../assets/icon-sun.svg' ;
-import iconMoon from '../assets/icon-moon.svg' ;
-import iconCross from '../assets/icon-cross.svg' ;
+import iconSun from '../assets/icon-sun.svg';
+import iconMoon from '../assets/icon-moon.svg';
+import iconCross from '../assets/icon-cross.svg';
+
 export interface TodoListApp {
-todo: string;
- completed: boolean;
-  id: string
+  todo: string;
+  completed: boolean;
+  id: string;
 }
 
 interface State {
@@ -19,14 +20,13 @@ type Action =
   | { type: "ToggleTodoList"; payload: TodoListApp }
   | { type: "DeleteTodo"; payload: { id: string } }
   | { type: "ClearCompletedTodo" }
-  | { type: "SET_FILTER"; payload: "All" | "Completed" | "Active" };
-
+  | { type: "SET_FILTER"; payload: "All" | "Completed" | "Active" }
+  | { type: "ReorderTodos"; payload: TodoListApp[] };
 
 const initialState: State = {
   todos: [],
   filter: "All",
 };
-
 
 function todoReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -58,6 +58,11 @@ function todoReducer(state: State, action: Action): State {
       return {
         ...state,
         filter: action.payload,
+      };
+    case "ReorderTodos":
+      return {
+        ...state,
+        todos: action.payload,
       };
     default:
       return state;
@@ -114,6 +119,22 @@ export default function TodoList({ todos, changeBackground }: TodoListProps) {
     dispatch({ type: "SET_FILTER", payload: filter });
   }
 
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>, index: number) {
+    e.dataTransfer.setData("text/plain", index.toString());
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>, index: number) {
+    const sourceIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
+    const updatedTodos = [...todoList];
+    const [movedTodo] = updatedTodos.splice(sourceIndex, 1);
+    updatedTodos.splice(index, 0, movedTodo);
+    dispatch({ type: "ReorderTodos", payload: updatedTodos });
+  }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+  }
+
   return (
     <div className="container">
       <div className="header">
@@ -136,12 +157,15 @@ export default function TodoList({ todos, changeBackground }: TodoListProps) {
         />
       </form>
       <div className="todos">
-        {shownList.map((todo) => (
+        {shownList.map((todo, index) => (
           <Todo
             key={todo.id}
             todo={todo}
             tick={handleCheck}
             cancel={handleDelete}
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDrop={(e) => handleDrop(e, index)}
+            onDragOver={handleDragOver}
           />
         ))}
       </div>
@@ -158,11 +182,27 @@ interface TodoProps {
   todo: TodoListApp;
   tick: (todo: TodoListApp) => void;
   cancel: (id: string) => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-function Todo({ todo, tick, cancel }: TodoProps) {
+function Todo({
+  todo,
+  tick,
+  cancel,
+  onDragStart,
+  onDrop,
+  onDragOver
+}: TodoProps) {
   return (
-    <div className={`${todo.completed ? "completed" : ""} todo todo-container`}>
+    <div
+      className={`${todo.completed ? "completed" : ""} todo todo-container`}
+      draggable
+      onDragStart={onDragStart}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+    >
       <div className="row">
         <button className="circle" onClick={() => tick(todo)}></button>
         <p className="title">{todo.todo}</p>
